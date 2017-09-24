@@ -54,5 +54,10 @@ public class Vertex implements Comparable<Vertex> {
         return 0;
     }
 
+    @Override
+    public String toString() {
+        return "(" + posX + ", " + posY + ")";
+    }
+
 }
 

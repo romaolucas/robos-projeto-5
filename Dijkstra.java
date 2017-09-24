@@ -60,12 +60,15 @@ public class Dijkstra {
         pq.add(G.getVertex(0));
         while (!pq.isEmpty()) {
             Vertex v = pq.poll();
+            System.out.println("To olhando vertice " + v);
             for (int i = 0; i < v.inDegree(); i++) {
                 Edge vu = v.getAdjList().get(i);
+                System.out.println("Olhando a aresta: " + vu);
                 Vertex u = vu.getDestination();
                 if (v.getDistToSource() + vu.getWeight() < u.getDistToSource()) {
                     u.setDistToSource(v.getDistToSource() + vu.getWeight());
-                    parent[i] = G.getVertexes().indexOf(v);
+                    int idx = G.getVertexes().indexOf(u);
+                    parent[idx] = G.getVertexes().indexOf(v);
                     if (pq.contains(u)) {
                         pq.remove(u);
                         pq.add(u);
@@ -74,6 +77,12 @@ public class Dijkstra {
                     }
                 }
             }
+        }
+
+        for (int i = 0; i < 11; i++) {
+            Vertex v = G.getVertex(i);
+            System.out.println("Vertice: " + v + " distancia do inicio: " + v.getDistToSource());
+            System.out.println("Pai do vertice: " + G.getVertex(parent[i]));
         }
 
     }

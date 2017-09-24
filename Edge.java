@@ -24,5 +24,10 @@ public class Edge {
         return weight;
     }
 
+    @Override
+    public String toString() {
+        return origin + " - " + destination;
+    }
+
 }
 
