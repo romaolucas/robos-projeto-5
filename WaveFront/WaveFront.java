@@ -21,19 +21,16 @@ public class WaveFront {
     }
 
     public static void main(String[] args) {
-        Graph G = new Graph(80, 80);
-        double startX = 10;
-        double startY = 10;
-        G.discretizeMap(1);
-        G.fillMapWithObstacles(new Line2D[1]);
-        G.thickenLines(1);
+        Graph G = new Graph(1189, 841, 10);
+        double startX = 94 / 10;
+        double startY = 737 / 10;
         Queue<Vertex> q = new LinkedList<Vertex>();
         q.add(new Vertex(startX, startY));
         while (!q.isEmpty()) {
             Vertex v = q.poll();
             int vX = v.posX;
             int vY = v.posY;
-            List<Vertex> neighbors = v.getNeighbors(4, 80, 80);
+            List<Vertex> neighbors = v.getNeighbors(4, G.width, G.height);
             for (Vertex neighbor : neighbors) {
                 int x = neighbor.posX;
                 int y = neighbor.posY;
@@ -42,6 +39,8 @@ public class WaveFront {
                 q.add(neighbor);
             }
         }
+
+
         // int k = 0;
         // while (parent[k] != k) {
         //     System.out.println(k);
