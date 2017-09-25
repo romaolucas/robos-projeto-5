@@ -1,61 +1,43 @@
 import java.util.List;
-import java.util.ArrayList;
+import java.util.ArrayList;    
 
 public class Vertex implements Comparable<Vertex> {
 
-    private double posX;
+    public double posX;
 
-    private double posY;
+    public double posY;
 
-    private double distToSource;
-
-    private List<Edge> adjList;
+    public double distToSource;
 
     public Vertex(double posX, double posY) {
         this.posX = posX;
         this.posY = posY;
         this.distToSource = 0.0;
     }
+    
+    public List<Vertex> getNeighbors(int neighborhood, int height, int width) {
+        Vertex up = new Vertex(this.posX, Math.max(this.posY - 1, 0));
+        Vertex down = new Vertex(this.posX, Math.min(this.posY + 1, height));
+        Vertex left = new Vertex(Math.max(this.posX - 1, 0), this.posY);
+        Vertex right = new Vertex(Math.min(this.posX + 1, width), this.posY);
+        if (neighborhood == 4) return Arrays.asList(up, down, left, right);
 
-    public void setDistToSource(double distToSource) {
-        this.distToSource = distToSource;
-    }
-
-    public double getDistToSource() {
-        return distToSource;
-    }
-
-    public double getPosX() {
-        return posX;
-    }
-
-    public double getPosY() {
-        return posY;
-    }
-
-    public List<Vertex> getNeighbors(int neighborhood) {
-        Vertex up = new Vertex(this.posX, this.posY - 1);
-        Vertex down = new Vertex(this.posX, this.posY + 1);
-        Vertex left = new Vertex(this.posX - 1, this.posY);
-        Vertex right = new Vertex(this.posX + 1, this.posY);
-        
-        Vertex topLeft = new Vertex(this.posX - 1, this.posY - 1);
-        Vertex topRight = new Vertex(this.posX + 1, this.posY - 1);
-        Vertex bottomLeft = new Vertex(this.posX - 1, this.posY + 1);
-        Vertex bottomRight = new Vertex(this.posX + 1, this.posY + 1);
+        Vertex topLeft = new Vertex(Math.max(this.posX - 1, 0), Math.max(this.posY - 1, 0));
+        Vertex topRight = new Vertex(Math.min(this.posX + 1, width), Math.max(this.posY - 1, 0));
+        Vertex bottomLeft = new Vertex(Math.max(this.posX - 1, 0), Math.min(this.posY + 1, height));
+        Vertex bottomRight = new Vertex(Math.min(this.posX + 1, width), Math.min(this.posY + 1, height));
 
         List<Vertex> neighbors = new ArrayList<Vertex>();
         neighbors.add(up);
         neighbors.add(down);
         neighbors.add(left);
         neighbors.add(right);
-        if (neighborhood > 4) {
-            neighbors.add(topLeft);
-            neighbors.add(topRight);
-            neighbors.add(bottomLeft);
-            neighbors.add(bottomRight);
-        }
-        return vertexes;
+        neighbors.add(topLeft);
+        neighbors.add(topRight);
+        neighbors.add(bottomLeft);
+        neighbors.add(bottomRight);
+        
+        return neighbors;
     }
 
     public int compareTo(Vertex w) {

@@ -1,47 +1,81 @@
 import java.util.List;
 import java.util.ArrayList;
+import java.awt.geom.Line2D; 
+
 
 public class Graph {
 
-    private int V;
-    
-    private List<Vertex> vertexes;
+    public [][]double map;
+    public int width;
+    public int height;
 
-    public Graph(int V) {
-        this.V = V;
-        vertexes = new ArrayList<>(V);
+    public Graph(int height, int width, int dim) {
+        this.width = width;
+        this.height = height;
+        this.map = new double[height][width];
+        Line2D[] lines = {
+          /* L-shape polygon */
+          new Line2D(164,356,58,600),
+          new Line2D(58,600,396,721),
+          new Line2D(396,721,455,600),
+          new Line2D(455,600,227,515),
+          new Line2D(227,515,280,399),
+          new Line2D(280,399,164,356),
+          /* Triangle */
+          new Line2D(778,526,1079,748),
+          new Line2D(1079,748,1063,436),
+          new Line2D(1063,436,778,526),
+          /* Pentagon */
+          new Line2D(503,76,333,267),
+          new Line2D(333,267,481,452),
+          new Line2D(481,452,730,409),
+          new Line2D(730,409,704,150),
+          new Line2D(704,150,503,76)
+        };
+        fillMapWithObstacles(lines);
+        thickenLines(1);  
     }
 
-    public Graph(List<Vertex> vertexes) {
-        this.V = vertexes.size();
-        this.vertexes = vertexes;
+    public void fillMapWithObstacles(Line2D[] lines) {
+        for (Line2D line : lines) {
+            double startX = Math.min(line.getX1(), line.getX2());
+            double finalX = Math.max(line.getX1(), line.getX2());
+            double m = (line.getY2() - line.getY1()) / (line.getX2() - line.getX1()); 
+            for (int x = (int) startX; x <= (int) finalX; x++) {
+                int y = (int) m * (x - line.getX1()) + line.getY1();
+                map[y][x] = 1;
+            }
+        }
     }
 
-    public void addVertex(Vertex v) {
-        this.vertexes.add(v);
+    public void thickenLines(int radius) {
+        double [][]newMap = new double[height][width];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (map[y][x] == 1) {
+                    Vertex v = new Vertex(x, y);
+                    newMap[y][x] = 1;
+                    List<Vertex> neighbors = v.getNeighbors(4, width, height);
+                    for (Vertex neighbor : neighbors) {
+                        int neighborX = (int) neighbor.posX;
+                        int neighborY = (int) neighbor.posY;
+                        newMap[neighborY][neighborX] = 1;
+                    }
+                }
+            }
+        }
+
+        map = newMap;
+
     }
 
-    public void addEdge(int origin, int destination) {
-        Vertex v = getVertex(origin);
-        Vertex w = getVertex(destination);
-        double deltaX, deltaY;
-        deltaX = v.getPosX() - w.getPosX();
-        deltaY = v.getPosY() - w.getPosY();
-        double dist = Math.sqrt(deltaX*deltaX + deltaY*deltaY);
-        v.addEdge(new Edge(v, w, dist));
-        w.addEdge(new Edge(w, v, dist));
+    public void discretizeMap(int dim) {
+
+
     }
 
-    public List<Vertex> getVertexes() {
-        return vertexes;
-    }
+    public List<Vertex> linearizePath(List<Vertex> path) {
 
-    public int getV() {
-        return V;
-    }
-
-    public Vertex getVertex(int i) {
-        return vertexes.get(i);
     }
 
 }
