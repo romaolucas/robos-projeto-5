@@ -4,54 +4,59 @@ import java.awt.geom.Line2D;
 
 public class Graph {
 
-    public [][]double map;
+    public double[][] map;
     public int width;
     public int height;
     public int dim;
 
-    public Graph(int height, int width, int dim) {
+    public Graph(int width, int height, int dim) {
         this.width = width;
         this.height = height;
         this.dim = dim;
         this.map = new double[height][width];
-        Line2D[] lines = {
+        for (int i = 0; i < height; i ++) {
+            for (int j = 0; j < width; j++) {
+                this.map[i][j] = 0;
+            }
+        }
+        Line2D.Double[] lines = {
           /* L-shape polygon */
-          new Line2D(164,356,58,600),
-          new Line2D(58,600,396,721),
-          new Line2D(396,721,455,600),
-          new Line2D(455,600,227,515),
-          new Line2D(227,515,280,399),
-          new Line2D(280,399,164,356),
+          new Line2D.Double(164,356,58,600),
+          new Line2D.Double(58,600,396,721),
+          new Line2D.Double(396,721,455,600),
+          new Line2D.Double(455,600,227,515),
+          new Line2D.Double(227,515,280,399),
+          new Line2D.Double(280,399,164,356),
           /* Triangle */
-          new Line2D(778,526,1079,748),
-          new Line2D(1079,748,1063,436),
-          new Line2D(1063,436,778,526),
+          new Line2D.Double(778,526,1079,748),
+          new Line2D.Double(1079,748,1063,436),
+          new Line2D.Double(1063,436,778,526),
           /* Pentagon */
-          new Line2D(503,76,333,267),
-          new Line2D(333,267,481,452),
-          new Line2D(481,452,730,409),
-          new Line2D(730,409,704,150),
-          new Line2D(704,150,503,76)
+          new Line2D.Double(503,76,333,267),
+          new Line2D.Double(333,267,481,452),
+          new Line2D.Double(481,452,730,409),
+          new Line2D.Double(730,409,704,150),
+          new Line2D.Double(704,150,503,76)
         };
         fillMapWithObstacles(lines);
         thickenLines(1);
         discretizeMap(dim);  
     }
 
-    public void fillMapWithObstacles(Line2D[] lines) {
-        for (Line2D line : lines) {
+    public void fillMapWithObstacles(Line2D.Double[] lines) {
+        for (Line2D.Double line : lines) {
             double startX = Math.min(line.getX1(), line.getX2());
             double finalX = Math.max(line.getX1(), line.getX2());
             double m = (line.getY2() - line.getY1()) / (line.getX2() - line.getX1()); 
             for (int x = (int) startX; x <= (int) finalX; x++) {
-                int y = (int) m * (x - line.getX1()) + line.getY1();
+                int y = (int) (m * (x - line.getX1()) + line.getY1());
                 map[y][x] = -1;
             }
         }
     }
 
     public void thickenLines(int radius) {
-        double [][]newMap = new double[height][width];
+        double newMap[][] = new double[height][width];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (map[y][x] == -1) {
@@ -74,7 +79,14 @@ public class Graph {
     public void discretizeMap(int dim) {
         int newHeight = height / dim;
         int newWidth = width / dim;
-        double [][]newMap = new double[newHeight][newWidth];
+        double newMap[][] = new double[newHeight][newWidth];
+        for (int y = 0; y < newHeight; y++) {
+            for (int x = 0; x < newWidth; x++) {
+                newMap[y][x] = 0;
+            }
+        }
+
+
         for (int y = 0; y < newHeight; y++) {
             for (int x = 0; x < newWidth; x++) {
                 for (int y1 = y * dim; y1 < (y * dim) + dim; y1++) {
@@ -91,7 +103,7 @@ public class Graph {
     }
 
     public List<Vertex> linearizePath(List<Vertex> path) {
-
+        return null;
     }
 
 }
