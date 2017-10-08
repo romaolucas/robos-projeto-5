@@ -49,6 +49,7 @@ public class VisibilityMap {
                     Point2D pointV = new Point2D.Double(v.getPosX(), v.getPosY());
                     Point2D pointU = new Point2D.Double(u.getPosX(), u.getPosY());
                     Line2D lineVU = new Line2D.Double(pointV, pointU);
+                    System.out.println(" pontos: " + pointV + " e " + pointU);
                     for (Line2D polygonLine : polygons) {
                         /* 
                          * dois pontos nao se ligam se:
@@ -56,6 +57,7 @@ public class VisibilityMap {
                          * ii - a linha entre os dois intersepta outra linha, mas nenhum deles
                          * esta contido nela
                          * */
+                        System.out.println("to aqui com " + polygonLine.getP1() + " - "  + polygonLine.getP2());
                         if (polygonLine.contains(pointV) && polygonLine.contains(pointU)) {
                             interceptsAnyLine = true;
                             break;
@@ -65,10 +67,13 @@ public class VisibilityMap {
                             break;
                         }
                     }
+                    System.out.println();
                     if (!interceptsAnyLine) {
+                        System.out.println("Opa cheguei aqui, vou colocar uma linha");
                         G.addEdge(i, j);
                         lines.add(lineVU);
                     }
+                    interceptsAnyLine = false;
                 }
             }
         }
@@ -77,6 +82,27 @@ public class VisibilityMap {
 
     public static void main(String[] args) {
         Graph G = computeGraph();
+        StdDraw.setXscale(0, 1189);
+        StdDraw.setYscale(0, 841);
+        StdDraw.setPenRadius(0.01);
+        StdDraw.setPenColor(StdDraw.BLACK);
+        for (Line2D polygonLine : polygons) {
+            Point2D point1 = polygonLine.getP1();
+            Point2D point2 = polygonLine.getP2();
+            StdDraw.line(point1.getX(), point1.getY(),point2.getX(), point2.getY());
+        }
+        StdDraw.setPenColor(StdDraw.RED);
+        StdDraw.setPenRadius(0.05);
+        for (Point2D point : points) {
+            StdDraw.point(point.getX(), point.getY());
+        }
+        StdDraw.setPenRadius(0.01);
+        StdDraw.setPenColor(StdDraw.BLACK);
+        for (Line2D line : lines) {
+            Point2D point1 = line.getP1();
+            Point2D point2 = line.getP2();
+            StdDraw.line(point1.getX(), point1.getY(), point2.getX(), point2.getY());
+        }
     }
 
 }
