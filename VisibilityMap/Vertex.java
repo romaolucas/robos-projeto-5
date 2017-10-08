@@ -1,5 +1,6 @@
 import java.util.List;
 import java.util.ArrayList;
+import java.awt.geom.Point2D;
 
 public class Vertex implements Comparable<Vertex> {
 
@@ -16,6 +17,10 @@ public class Vertex implements Comparable<Vertex> {
         this.posY = posY;
         this.adjList = new ArrayList<>();
         this.distToSource = 0.0;
+    }
+
+    public Vertex(Point2D point) {
+        this(point.getX(), point.getY());
     }
 
     public void setDistToSource(double distToSource) {
@@ -52,6 +57,10 @@ public class Vertex implements Comparable<Vertex> {
         if (this.distToSource > w.getDistToSource())
             return 1;
         return 0;
+    }
+
+    public boolean is(Point2D point) {
+        return posX == point.getX() && posY == point.getY();
     }
 
     @Override

@@ -7,9 +7,15 @@ public class Graph {
     
     private List<Vertex> vertexes;
 
+
+    public Graph() {
+        V = 0;
+        vertexes = new ArrayList<>();
+    }
+
     public Graph(int V) {
         this.V = V;
-        vertexes = new ArrayList<>(V);
+        vertexes = new ArrayList<>();
     }
 
     public Graph(List<Vertex> vertexes) {
@@ -19,6 +25,7 @@ public class Graph {
 
     public void addVertex(Vertex v) {
         this.vertexes.add(v);
+        V++;
     }
 
     public void addEdge(int origin, int destination) {
