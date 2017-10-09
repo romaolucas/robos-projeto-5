@@ -7,32 +7,33 @@ public class VisibilityMap {
     public static List<Line2D> polygonLines = new ArrayList<Line2D>();
 
     public static List<Line2D> rectangles = new ArrayList<Line2D>() {{
-       add(new Line2D.Double(164, 356, 58, 600));
-       add(new Line2D.Double(58, 600, 396, 721));
-       add(new Line2D.Double(396, 721, 455, 600));
-       add(new Line2D.Double(455, 600, 227, 515));
-       add(new Line2D.Double(227, 515, 280, 399));
-       add(new Line2D.Double(280, 399, 164, 356));
+       add(new Line2D.Double(16.4, 35.6, 5.8, 60.0));
+       add(new Line2D.Double(5.8, 60.0, 39.6, 72.1));
+       add(new Line2D.Double(39.6, 72.1, 45.5, 60.0));
+       add(new Line2D.Double(45.5, 60.0, 22.7, 51.5));
+       add(new Line2D.Double(22.7, 51.5, 28.0, 39.9));
+       add(new Line2D.Double(28.0, 39.9, 16.4, 35.6));
     }};
 
     public static List<Line2D> triangle = new ArrayList<Line2D>() {{
-       add(new Line2D.Double(778, 526, 1079, 748));
-       add(new Line2D.Double(1079, 748, 1063, 436));
-       add(new Line2D.Double(1063, 436, 778, 526));
+       add(new Line2D.Double(77.8, 52.6, 107.9, 74.8));
+       add(new Line2D.Double(107.9, 74.8, 106.3, 43.6));
+       add(new Line2D.Double(106.3, 43.6, 77.8, 52.6));
     }};
 
     public static List<Line2D> pentagon = new ArrayList<Line2D>() {{
-       add(new Line2D.Double(503, 76, 333, 267));
-       add(new Line2D.Double(333, 267, 481, 452));
-       add(new Line2D.Double(481, 452, 730, 409));
-       add(new Line2D.Double(730, 409, 704, 150));
-       add(new Line2D.Double(704, 150, 503, 76));
+       add(new Line2D.Double(50.3, 7.6, 33.3, 26.7));
+       add(new Line2D.Double(33.3, 26.7, 48.1, 45.2));
+       add(new Line2D.Double(48.1, 45.2, 73.0, 40.9));
+       add(new Line2D.Double(73.0, 40.9, 70.4, 15.0));
+       add(new Line2D.Double(70.4, 15.0, 50.3, 7.6));
     
     }};
 
     public static List<Point2D> points = new ArrayList<Point2D>() {{
-       add(new Point2D.Double(94,737)); /* P1 */
-       add(new Point2D.Double(489,18)); /* P11 */        
+       add(new Point2D.Double(9.4,73.7)); /* P1 */
+       add(new Point2D.Double(99.4, 8.8)); /* P10 */
+       add(new Point2D.Double(48.9,1.8)); /* P11 */        
     }};
 
     public static List<Line2D> lines = new ArrayList<Line2D>();
@@ -99,14 +100,9 @@ public class VisibilityMap {
         return G;
     }
 
-    public static void main(String[] args) {
-        Graph G = computeGraph();
-        Dijkstra dijkstra = new Dijkstra();
-        dijkstra.calculateShortestPath(G, G.getVertex(points.get(0)));
-        StdDraw.setXscale(0, 1189);
-        StdDraw.setYscale(0, 841);
-        StdDraw.setPenRadius(0.005);
+    public static void drawVisibilityMap() {
         StdDraw.setPenColor(StdDraw.BLACK);
+        StdDraw.setPenRadius(0.005);
         for (Line2D polygonLine : polygonLines) {
             Point2D point1 = polygonLine.getP1();
             Point2D point2 = polygonLine.getP2();
@@ -117,16 +113,26 @@ public class VisibilityMap {
         for (Point2D point : points) {
             StdDraw.point(point.getX(), point.getY());
         }
-        StdDraw.setPenRadius(0.005);
+        StdDraw.setPenRadius(0.002);
         StdDraw.setPenColor(StdDraw.BLACK);
         for (Line2D line : lines) {
             Point2D point1 = line.getP1();
             Point2D point2 = line.getP2();
             StdDraw.line(point1.getX(), point1.getY(), point2.getX(), point2.getY());
         }
-        StdDraw.setPenColor(StdDraw.ORANGE);
-        Vertex v = G.getVertex(points.get(1));
+    }
+
+    public static void main(String[] args) {
+        Graph G = computeGraph();
+        Dijkstra dijkstra = new Dijkstra();
+        dijkstra.calculateShortestPath(G, G.getVertex(points.get(2)));
+        StdDraw.setXscale(0, 118.9);
+        StdDraw.setYscale(0, 84.1);
+        drawVisibilityMap();
+        Vertex v = G.getVertex(points.get(0));
         List<Vertex> path = new ArrayList<>();
+        StdDraw.setPenRadius(0.005);
+        StdDraw.setPenColor(StdDraw.ORANGE);
         path.add(v);
         while (!v.equals(v.getParent())) {
             Vertex u = v.getParent();
@@ -134,7 +140,7 @@ public class VisibilityMap {
             path.add(u);
             v = u;
         }
-        System.out.println("Caminho de P1 a P11:");
+        System.out.println("Caminho de P11 a P1:");
         for (int i = path.size() - 1; i >= 0; i--) {
             System.out.println(path.get(i));
         }
