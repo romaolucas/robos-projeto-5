@@ -1,24 +1,24 @@
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 
 public class Graph {
 
     private int V;
     
-    private List<Vertex> vertexes;
+    private Set<Vertex> vertexes;
 
 
     public Graph() {
         V = 0;
-        vertexes = new ArrayList<>();
+        vertexes = new HashSet<>();
     }
 
     public Graph(int V) {
         this.V = V;
-        vertexes = new ArrayList<>();
+        vertexes = new HashSet<>();
     }
 
-    public Graph(List<Vertex> vertexes) {
+    public Graph(Set<Vertex> vertexes) {
         this.V = vertexes.size();
         this.vertexes = vertexes;
     }
@@ -28,9 +28,7 @@ public class Graph {
         V++;
     }
 
-    public void addEdge(int origin, int destination) {
-        Vertex v = getVertex(origin);
-        Vertex w = getVertex(destination);
+    public void addEdge(Vertex v, Vertex w) {
         double deltaX, deltaY;
         deltaX = v.getPosX() - w.getPosX();
         deltaY = v.getPosY() - w.getPosY();
@@ -39,7 +37,7 @@ public class Graph {
         w.addEdge(new Edge(w, v, dist));
     }
 
-    public List<Vertex> getVertexes() {
+    public Set<Vertex> getVertexes() {
         return vertexes;
     }
 
@@ -47,8 +45,5 @@ public class Graph {
         return V;
     }
 
-    public Vertex getVertex(int i) {
-        return vertexes.get(i);
-    }
 
 }

@@ -63,6 +63,10 @@ public class Vertex implements Comparable<Vertex> {
         return posX == point.getX() && posY == point.getY();
     }
 
+    public boolean equals(Vertex u) {
+        return posX == u.getPosX() && posY == u.getPosY();
+    }
+
     @Override
     public String toString() {
         return "(" + posX + ", " + posY + ")";
