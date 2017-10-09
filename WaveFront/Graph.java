@@ -14,7 +14,7 @@ public class Graph {
     public int dim;
     public Line2D.Double[] lines;
 
-    public Graph(int width, int height, int dim) {
+    public Graph(int width, int height, int dim, int radius, Line2D.Double[] lines) {
         this.width = width;
         this.height = height;
         this.dim = dim;
@@ -24,29 +24,13 @@ public class Graph {
                 this.map[i][j] = 0;
             }
         }
-        Line2D.Double[] lines = {
-          /* L-shape polygon */
-          new Line2D.Double(164,356,58,600),
-          new Line2D.Double(58,600,396,721),
-          new Line2D.Double(396,721,455,600),
-          new Line2D.Double(455,600,227,515),
-          new Line2D.Double(227,515,280,399),
-          new Line2D.Double(280,399,164,356),
-          /* Triangle */
-          new Line2D.Double(778,526,1079,748),
-          new Line2D.Double(1079,748,1063,436),
-          new Line2D.Double(1063,436,778,526),
-          /* Pentagon */
-          new Line2D.Double(503,76,333,267),
-          new Line2D.Double(333,267,481,452),
-          new Line2D.Double(481,452,730,409),
-          new Line2D.Double(730,409,704,150),
-          new Line2D.Double(704,150,503,76)
-        };
+
         this.lines = lines;
         fillMapWithObstacles(lines);
-        thickenLines(1);
         discretizeMap(dim);  
+        if (radius > 0) {
+           thickenLines(radius);
+        }
     }
 
     public void fillMapWithObstacles(Line2D.Double[] lines) {
@@ -69,10 +53,10 @@ public class Graph {
                     Vertex v = new Vertex(x, y);
                     newMap[y][x] = -1;
                     List<Vertex> neighbors = v.getNeighbors(4, width, height);
-                    for (Vertex neighbor : neighbors) {
-                        int neighborX = (int) neighbor.posX;
-                        int neighborY = (int) neighbor.posY;
-                        newMap[neighborY][neighborX] = -1;
+                    for (int k = Math.max(0, x - radius); k < Math.min(width - 1, x + radius); k++) {
+                        for (int l = Math.max(0, y - radius); l < Math.min(height - 1, y + radius); l++) {
+                            newMap[l][k] = -1;
+                        }
                     }
                 }
             }

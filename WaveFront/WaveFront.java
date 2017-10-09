@@ -24,16 +24,42 @@ public class WaveFront {
     }
 
     public static void main(String[] args) {
-        int dim = 10;
-        StdDraw.setXscale(0, 1189 / dim);
-        StdDraw.setYscale(0, 841 / dim);
-        StdDraw.setPenRadius(0.01);
+        int dim = 10; // precisao da discretizacao, 10 = 1cmx1cm, 20 = 2cmx2cm, 1 = discretizacao minima, cada vertice 1 milimetro.
+        int radius = 0; // raio de dilatacao das linhas
+        // dimensao do mapa em milimetros
+        int widthMap = 1189;
+        int heightMap = 841;
+        // obstaculos do mapa
+        Line2D.Double[] lines = {
+          /* L-shape polygon */
+          new Line2D.Double(164,356,58,600),
+          new Line2D.Double(58,600,396,721),
+          new Line2D.Double(396,721,455,600),
+          new Line2D.Double(455,600,227,515),
+          new Line2D.Double(227,515,280,399),
+          new Line2D.Double(280,399,164,356),
+          /* Triangle */
+          new Line2D.Double(778,526,1079,748),
+          new Line2D.Double(1079,748,1063,436),
+          new Line2D.Double(1063,436,778,526),
+          /* Pentagon */
+          new Line2D.Double(503,76,333,267),
+          new Line2D.Double(333,267,481,452),
+          new Line2D.Double(481,452,730,409),
+          new Line2D.Double(730,409,704,150),
+          new Line2D.Double(704,150,503,76)
+        };
+        StdDraw.setXscale(0, widthMap / dim);
+        StdDraw.setYscale(0, heightMap / dim);
+        StdDraw.setPenRadius(0.04);
         StdDraw.setPenColor(StdDraw.BLACK);
-        Graph G = new Graph(1189, 841, dim);
-        double startX = 113 / dim;
-        double startY = 35 / dim;
-        int goalX = 90 / dim;
-        int goalY = 730 / dim;
+        Graph G = new Graph(widthMap, heightMap, dim, radius, lines);
+
+        // pontos iniciais e finais
+        double startX = 90 / dim;
+        double startY = 730 / dim;
+        int goalX = 490 / dim;
+        int goalY = 18 / dim;
 
         for (int y = 0; y < G.height; y++) {
             for (int x = 0; x < G.width; x++) {
@@ -44,6 +70,7 @@ public class WaveFront {
             }
         }
 
+        // faz a ida com vizinhanca 4
         Queue<Vertex> q = new LinkedList<Vertex>();
         q.add(new Vertex(startX, startY));
         while (!q.isEmpty()) {
@@ -66,12 +93,12 @@ public class WaveFront {
             }
         }
 
-        StdDraw.setPenColor(StdDraw.GREEN);
-        StdDraw.point(9, 73);
-
+        // faz a volta com vizinhanca 8
         Vertex v = new Vertex(goalX, goalY);
         Stack<Vertex> path = new Stack();
+        Stack<Vertex> nonLinearizedPath = new Stack();
         path.add(v);
+        nonLinearizedPath.add(v);
         int minNeighborDist = G.width * G.height;
         while (minNeighborDist > 1) {
             Vertex minNeighbor = new Vertex(0, 0);
@@ -90,9 +117,23 @@ public class WaveFront {
             }
             v = minNeighbor;
             path.push(minNeighbor);
+            nonLinearizedPath.push(minNeighbor);
         }
         path.push(new Vertex(startX, startY));
+        nonLinearizedPath.push(new Vertex(startX, startY));
 
+        // desenha o caminho nao linearizado
+        while (!nonLinearizedPath.isEmpty()) {
+            v = nonLinearizedPath.pop();
+            int vX = (int) v.posX;
+            int vY = (int) v.posY;
+            StdDraw.setPenColor(StdDraw.RED);
+            StdDraw.point(vX, vY);
+        }
+        StdDraw.setPenColor(StdDraw.RED);
+        StdDraw.point(startX, startY);
+
+        // lineariza e desenha o caminho linearizado
         Queue<Vertex> finalPath = G.linearizePath(path);
         System.out.println("Caminho linearizado de (" + startX + ", " + startY + ") ateh (" + goalX + ", " + goalY + ")");
         for (Vertex vertex : finalPath) {
@@ -103,15 +144,7 @@ public class WaveFront {
             StdDraw.setPenColor(StdDraw.GREEN);
             StdDraw.point(vX, vY);
         }
-        // while (!path.isEmpty()) {
-        //     v = path.pop();
-        //     int vX = (int) v.posX;
-        //     int vY = (int) v.posY;
-        //     StdDraw.setPenColor(StdDraw.RED);
-        //     StdDraw.point(vX, vY);
-        // }
-        // StdDraw.setPenColor(StdDraw.RED);
-        // StdDraw.point(startX, startY);
+
 
     }
 
