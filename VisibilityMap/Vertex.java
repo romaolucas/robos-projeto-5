@@ -12,6 +12,8 @@ public class Vertex implements Comparable<Vertex> {
 
     private List<Edge> adjList;
 
+    private Vertex parent;
+
     public Vertex(double posX, double posY) {
         this.posX = posX;
         this.posY = posY;
@@ -25,6 +27,10 @@ public class Vertex implements Comparable<Vertex> {
 
     public void setDistToSource(double distToSource) {
         this.distToSource = distToSource;
+    }
+
+    public void setParent(Vertex parent) {
+        this.parent = parent;
     }
 
     public double getDistToSource() {
@@ -45,6 +51,10 @@ public class Vertex implements Comparable<Vertex> {
 
     public List<Edge> getAdjList() {
         return adjList;
+    }
+
+    public Vertex getParent() {
+        return parent;
     }
 
     public int inDegree() {

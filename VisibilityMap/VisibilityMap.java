@@ -57,9 +57,6 @@ public class VisibilityMap {
         addVertexesFrom(rectangles, rectanglesPoints, G);
         addVertexesFrom(triangle, trianglePoints, G);
         addVertexesFrom(pentagon, pentagonPoints, G);
-        System.out.println("Pontos no retangulo: " + rectanglesPoints.size());
-        System.out.println("Pontos no triangulo: " + trianglePoints.size());
-        System.out.println("Pontos no pentagono: " + pentagonPoints.size());
         for (Point2D point : points) {
             G.addVertex(new Vertex(point));
         }
@@ -104,9 +101,11 @@ public class VisibilityMap {
 
     public static void main(String[] args) {
         Graph G = computeGraph();
+        Dijkstra dijkstra = new Dijkstra();
+        dijkstra.calculateShortestPath(G, G.getVertex(points.get(0)));
         StdDraw.setXscale(0, 1189);
         StdDraw.setYscale(0, 841);
-        StdDraw.setPenRadius(0.001);
+        StdDraw.setPenRadius(0.005);
         StdDraw.setPenColor(StdDraw.BLACK);
         for (Line2D polygonLine : polygonLines) {
             Point2D point1 = polygonLine.getP1();
@@ -114,16 +113,30 @@ public class VisibilityMap {
             StdDraw.line(point1.getX(), point1.getY(),point2.getX(), point2.getY());
         }
         StdDraw.setPenColor(StdDraw.RED);
-        StdDraw.setPenRadius(0.005);
+        StdDraw.setPenRadius(0.03);
         for (Point2D point : points) {
             StdDraw.point(point.getX(), point.getY());
         }
-        StdDraw.setPenRadius(0.001);
+        StdDraw.setPenRadius(0.005);
         StdDraw.setPenColor(StdDraw.BLACK);
         for (Line2D line : lines) {
             Point2D point1 = line.getP1();
             Point2D point2 = line.getP2();
             StdDraw.line(point1.getX(), point1.getY(), point2.getX(), point2.getY());
+        }
+        StdDraw.setPenColor(StdDraw.ORANGE);
+        Vertex v = G.getVertex(points.get(1));
+        List<Vertex> path = new ArrayList<>();
+        path.add(v);
+        while (!v.equals(v.getParent())) {
+            Vertex u = v.getParent();
+            StdDraw.line(u.getPosX(), u.getPosY(), v.getPosX(), v.getPosY());
+            path.add(u);
+            v = u;
+        }
+        System.out.println("Caminho de P1 a P11:");
+        for (int i = path.size() - 1; i >= 0; i--) {
+            System.out.println(path.get(i));
         }
     }
 

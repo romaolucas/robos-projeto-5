@@ -1,5 +1,6 @@
 import java.util.Set;
 import java.util.HashSet;
+import java.awt.geom.Point2D;
 
 public class Graph {
 
@@ -39,6 +40,15 @@ public class Graph {
 
     public Set<Vertex> getVertexes() {
         return vertexes;
+    }
+
+    public Vertex getVertex(Point2D point) {
+        for (Vertex v : vertexes) {
+            if (v.is(point)) {
+                return v;
+            }
+        }
+        return null;
     }
 
     public int getV() {
