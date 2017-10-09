@@ -88,20 +88,29 @@ public class WaveFront {
                     minNeighbor = neighbor;
                 }
             }
-            System.out.println(minNeighborDist);
             v = minNeighbor;
             path.push(minNeighbor);
         }
         path.push(new Vertex(startX, startY));
-        while (!path.isEmpty()) {
-            v = path.pop();
-            int vX = (int) v.posX;
-            int vY = (int) v.posY;
-            StdDraw.setPenColor(StdDraw.RED);
+
+        Queue<Vertex> finalPath = G.linearizePath(path);
+        System.out.println(finalPath.size());
+        for (Vertex vertex : finalPath) {
+            int vX = (int) vertex.posX;
+            int vY = (int) vertex.posY;
+            StdDraw.setPenRadius(0.02);
+            StdDraw.setPenColor(StdDraw.GREEN);
             StdDraw.point(vX, vY);
         }
-        StdDraw.setPenColor(StdDraw.RED);
-        StdDraw.point(startX, startY);
+        // while (!path.isEmpty()) {
+        //     v = path.pop();
+        //     int vX = (int) v.posX;
+        //     int vY = (int) v.posY;
+        //     StdDraw.setPenColor(StdDraw.RED);
+        //     StdDraw.point(vX, vY);
+        // }
+        // StdDraw.setPenColor(StdDraw.RED);
+        // StdDraw.point(startX, startY);
 
     }
 

@@ -1,6 +1,10 @@
 import java.util.List;
 import java.util.ArrayList;
 import java.awt.geom.Line2D; 
+import java.awt.geom.Point2D;
+import java.util.Queue;
+import java.util.LinkedList;
+import java.util.Stack;
 
 public class Graph {
 
@@ -8,6 +12,7 @@ public class Graph {
     public int width;
     public int height;
     public int dim;
+    public Line2D.Double[] lines;
 
     public Graph(int width, int height, int dim) {
         this.width = width;
@@ -38,6 +43,7 @@ public class Graph {
           new Line2D.Double(730,409,704,150),
           new Line2D.Double(704,150,503,76)
         };
+        this.lines = lines;
         fillMapWithObstacles(lines);
         thickenLines(1);
         discretizeMap(dim);  
@@ -102,8 +108,44 @@ public class Graph {
         map = newMap;
     }
 
-    public List<Vertex> linearizePath(List<Vertex> path) {
-        return null;
+    public Queue<Vertex> linearizePath(Stack<Vertex> path) {
+        System.out.println(path.size());
+        Queue<Vertex> finalPath = new LinkedList<Vertex>();
+        boolean intersectsAnyLine = false;
+        Vertex v = path.pop();
+        Vertex lastNonIntersectingVertex = v;
+        Vertex u;
+        int i = 0;
+        finalPath.add(v);
+        while (!path.isEmpty()) {
+            u = path.pop();
+            Point2D pointV = new Point2D.Double(v.posX * dim, v.posY * dim);
+            Point2D pointU = new Point2D.Double(u.posX * dim, u.posY * dim);
+            System.out.println(" pontos: " + pointV + " e " + pointU);
+            Line2D pathLine = new Line2D.Double(pointV, pointU);
+
+            for (Line2D line : lines) {
+                if (line.intersectsLine(pathLine)) {
+                    intersectsAnyLine = true;
+                    break;
+                }
+            }
+            if (!intersectsAnyLine) {
+                i++;
+                lastNonIntersectingVertex = u;
+            }
+            else {
+                i = 0;
+                System.out.println(" nunca aqui?");
+                finalPath.add(lastNonIntersectingVertex);
+                v = lastNonIntersectingVertex;
+            }
+            intersectsAnyLine = false;
+        }
+        finalPath.add(lastNonIntersectingVertex);
+        System.out.println(" cabo");
+
+        return finalPath;
     }
 
 }
