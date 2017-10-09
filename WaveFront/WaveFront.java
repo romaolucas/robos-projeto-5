@@ -94,10 +94,11 @@ public class WaveFront {
         path.push(new Vertex(startX, startY));
 
         Queue<Vertex> finalPath = G.linearizePath(path);
-        System.out.println(finalPath.size());
+        System.out.println("Caminho linearizado de (" + startX + ", " + startY + ") ateh (" + goalX + ", " + goalY + ")");
         for (Vertex vertex : finalPath) {
             int vX = (int) vertex.posX;
             int vY = (int) vertex.posY;
+            System.out.println("X: " + vX + " Y: " + vY);
             StdDraw.setPenRadius(0.02);
             StdDraw.setPenColor(StdDraw.GREEN);
             StdDraw.point(vX, vY);

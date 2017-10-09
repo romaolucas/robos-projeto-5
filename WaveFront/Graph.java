@@ -109,7 +109,7 @@ public class Graph {
     }
 
     public Queue<Vertex> linearizePath(Stack<Vertex> path) {
-        System.out.println(path.size());
+        System.out.println("Caminho antes de linearizar com tamanho: " + path.size());
         Queue<Vertex> finalPath = new LinkedList<Vertex>();
         boolean intersectsAnyLine = false;
         Vertex v = path.pop();
@@ -121,7 +121,7 @@ public class Graph {
             u = path.pop();
             Point2D pointV = new Point2D.Double(v.posX * dim, v.posY * dim);
             Point2D pointU = new Point2D.Double(u.posX * dim, u.posY * dim);
-            System.out.println(" pontos: " + pointV + " e " + pointU);
+            // System.out.println(" pontos: " + pointV + " e " + pointU);
             Line2D pathLine = new Line2D.Double(pointV, pointU);
 
             for (Line2D line : lines) {
@@ -136,14 +136,14 @@ public class Graph {
             }
             else {
                 i = 0;
-                System.out.println(" nunca aqui?");
+                // System.out.println(" nunca aqui?");
                 finalPath.add(lastNonIntersectingVertex);
                 v = lastNonIntersectingVertex;
             }
             intersectsAnyLine = false;
         }
         finalPath.add(lastNonIntersectingVertex);
-        System.out.println(" cabo");
+        System.out.println("Caminho depois de linearizar com tamanho: " + finalPath.size());;
 
         return finalPath;
     }
